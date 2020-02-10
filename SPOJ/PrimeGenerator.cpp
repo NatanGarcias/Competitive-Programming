@@ -8,13 +8,6 @@ using namespace std;
 
 #define endl "\n"
 
-#define pii pair<int,int>
-#define fi first 
-#define se second 
-
-#define INF 0x7fffffff
-#define INFLL 0x7fffffffffffffff
-
 #define MAXN 1000020
 
 vector<ll>primos;
