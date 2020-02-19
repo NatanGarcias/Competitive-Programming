@@ -8,47 +8,46 @@ using namespace std;
 #define pii pair<int,int> 
 #define fi first
 #define se second
+
 vector<pii> v;
 int n;
 
+
 int LIS(vector<int> &s){
 
-    vector<int> pilha(v.size(),1);
+    vector<int> pilha;
+    int pos[n], pai[n];
+    int p;
 
-    int maior = -1;
+    for(int i=0; i<v.size(); i++){
 
-    for(int i=1;i<v.size();i++){
-        for(int j=0;j<i;j++){
-            if(v[i].se > v[j].se){
-                pilha[i] = max(pilha[i],pilha[j] + 1);
-                
-                if(pilha[maior] < pilha[i]){
-                    maior = i;
-                }
-            } 
-        }
+        auto it = lower_bound(pilha.begin(), pilha.end(), v[i].se);
+
+        p = it-pilha.begin();
+
+        if(it==pilha.end()) pilha.push_back(v[i].se);
+        else *it = v[i].se;
+
+        // a posição original na sequência do número no topo da pilha p agora é i
+        pos[p]=i;
+
+        // se o elemento foi inserido na primeira pilha
+        if(p==0) pai[i]=-1; // seu pai será -1
+
+        // caso contrário, seu pai será a posição do elemento no topo da pilha anterior a ele
+        else pai[i]=pos[p-1];
     }
 
-    s.push_back(maior);
+    p = pos[pilha.size()-1];
 
-    int tam,ant;
-
-    tam = pilha[maior]-1;
-    ant = maior;
-    
-    for(int i=maior-1;i>=0;i--){
-        if(pilha[i] == tam && pilha[i] < pilha[ant]){
-            s.push_back(i);
-            ant = i;
-            tam--;
-
-            if(!tam) break;
-        }
+    while(p != -1){
+        s.push_back(p);
+        p=pai[p];
     }
-    
+
     reverse(s.begin(), s.end());
 
-    return pilha[maior];
+    return (int)s.size();
 }
 
 int main(){

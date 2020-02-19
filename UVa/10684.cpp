@@ -10,7 +10,7 @@ int n;
 
 #define ll long long 
 
-ll LCS(){
+ll subsequency(){
 
     ll ans = 0;
     ll temp = 0;
@@ -34,7 +34,7 @@ int main(){
             cin >> v[i];
         }
 
-        ll ans = LCS();
+        ll ans = subsequency();
 
         if(ans>0){
             cout << "The maximum winning streak is " << ans << ".\n";
