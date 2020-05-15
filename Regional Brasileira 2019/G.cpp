@@ -59,18 +59,14 @@ int main() {
         for(int j = 1; j <= m; j++) {
             cin >> a;
             cost[i][j] = -log2(a);
-            //printf("%Lg ", cost[i][j]);
         }
-        //printf("\n");
     }
 
     int ans = 0;
 
     hungarian();
     for(int j = 1; j <= m; j++) {
-        cout << pairV[j] << " \n"[j==m];// << cost[pairV[j]][j] << endl; 
-        //ans += cost[pairV[j]][j];
+        cout << pairV[j] << " \n"[j==m];
     }
-    //printf("%d\n", ans);
     return 0;
 }
