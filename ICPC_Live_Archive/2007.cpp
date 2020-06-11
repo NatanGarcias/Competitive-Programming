@@ -10,7 +10,6 @@ void f(const string &s){
             k+=s[i-1];
             k+=s[i];
             pilha.push(k);
-            //cout << k << endl;
         }
         else if(i+1<s.size() && s[i-2]=='<' && s[i-1]=='/' && (s[i] >= 'A' && s[i]<='Z') && s[i+1] == '>'){
             string k;
