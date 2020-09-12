@@ -110,28 +110,16 @@ int v[MAXN], ans[MAXN], cc, cc2;
 Query Q[MAXN];
 UnionFind UF;
 
-//Para o UF 1
-void add(int p) {
+void add(int p, int k, int &c){
+
 	int u = edge[p].fi, v = edge[p].se;
 
-	bool r = UF.sameSet(u,v,0);
+	bool r = UF.sameSet(u,v,k);
 
 	if(!r){
-		UF.unir(u,v,0);
-		cc--;
+		UF.unir(u,v,k);
+		c--;
 	}
-}
-
-//Para o UF 2
-void add2(int p) {
- 	int u = edge[p].fi, v = edge[p].se;
-
- 	bool r = UF.sameSet(u,v,1);
-
- 	if(!r) {
- 		cc2--; 
- 		UF.unir(u,v,1); 
- 	}
 }
 
 void MO(){
@@ -162,7 +150,7 @@ void MO(){
 			rMO = l-1;
 			lMO = l;
 
-			while(rMO < r) add2(++rMO);
+			while(rMO < r) add(++rMO, 1 , cc2);
 
 			rMO = min(M , (l/t) * t + t -1);
 		}
@@ -170,12 +158,12 @@ void MO(){
 			lMO = min(M , (l/t) * t + t);
 
 			//To adicionando do r anterior até r o r atual
-			while(rMO < r) add(++rMO);
+			while(rMO < r) add(++rMO, 0, cc);
 			
 			cc2 = cc;
 			
 			//To adicionando da l até SQRT
-			while(lMO > l) add2(--lMO);
+			while(lMO > l) add(--lMO, 1, cc2);
 		}
 
 		//Reseto a todo momento o UF2 por causa do l
