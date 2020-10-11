@@ -48,14 +48,6 @@ bool ok[MAXM][MAXN];
 vector<Show> shows;
 vector<int> prox;
 
-void imprimi(){
-	cout << endl;
-	FOR(i,0,sz(shows)){
-		cout << shows[i].i << space << shows[i].f << space << shows[i].o << endl;
-	}
-	cout << endl;
-}
-
 // i = shows que eu já fui / j = id do show atual
 int solve(int i, int j){
 
