@@ -35,7 +35,7 @@ struct HLD{
 	vector<int> parent, depth, heavy, head, pos, v_seg;
 	int cur_pos, n;
 
-	HLD(vector<vector<int>> const& adj) {
+	HLD(const vector<vector<int>> & adj) {
 	    n = adj.size();
 	    parent.resize(n);
 	    depth.resize(n);
@@ -53,7 +53,7 @@ struct HLD{
 	    build_seg(1,1,n);
 	}
 	
-	int dfs(int v, vector<vector<int>> const& adj){
+	int dfs(int v, const vector<vector<int>> & adj){
 	    int size = 1;
 	    int max_c_size = 0;
 	    for (int c : adj[v]) {
@@ -68,7 +68,7 @@ struct HLD{
 	    return size;
 	}
 
-	void decompose(int v, int h, vector<vector<int>> const& adj, int ant) { 
+	void decompose(int v, int h, const vector<vector<int>> & adj, int ant) { 
 		
 		if(ant == -1) v_seg[cur_pos] = -1;
 		else v_seg[cur_pos] = mapa[pii(v,ant)];

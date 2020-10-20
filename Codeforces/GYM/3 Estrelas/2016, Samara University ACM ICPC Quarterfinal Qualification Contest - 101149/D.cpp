@@ -157,6 +157,7 @@ void dfs(){
 	FOR(i,0,N) FOR(j,0,M) ans[i][j] = '.';
 	
 	FOR(i,0,N*M){
+		//
         if(dist[2*i]< 0 && dist[2*i+1] >= 0){
             int px = i/M;
             int py = i%M;
