@@ -64,30 +64,6 @@ int kuhn() {
     return result;
 }
 
-void imprimiHV(){
-	cout << "Hor:\n";
-	FOR(i,0,N){
-		FOR(j,0,M){
-			cout << hor[i][j] << " ";
-		}cout << endl;
-	}cout << endl;
-
-	cout << "Ver:\n";
-	FOR(i,0,N){
-		FOR(j,0,M){
-			cout << ver[i][j] << " ";
-		}cout << endl;
-	}cout << endl;
-}
-
-void imprimi(){
-	FOR(i,0,N){
-		FOR(j,0,M){
-			cout << v[i][j] << " ";
-		}cout << endl;
-	}cout << endl;
-}
-
 void preenche(){
 
 	int cont = 1;
