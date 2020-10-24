@@ -113,7 +113,6 @@ void solve(){
     cout << query(1,1,N,1,N) << endl;
 }
 
-
 int main(){
 
 	optimize;
