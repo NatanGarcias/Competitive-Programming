@@ -78,14 +78,6 @@ void pre(){
 	}
 }
 
-void imprimi(){
-	FOR(i,0,40){
-		FOR(j,0,40){
-			cout << setw(3) << m[i][j] << " ";
-		}cout << endl;
-	}cout << endl;
-}
-
 void solve(){
 	int ans = 0;
 
