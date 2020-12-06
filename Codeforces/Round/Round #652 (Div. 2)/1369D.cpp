@@ -23,43 +23,56 @@ typedef pair<int,int> pii;
 #define INFLL 0x3f3f3f3f3f3f3f3f
 
 #define mod 1000000007LL
-#define MAXN 200010
+#define MAXN 2000100
 
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 ll T,N,M,K;
 
-int v[MAXN];
+ll dp[MAXN], dp2[MAXN], dp3[MAXN], sum[MAXN];
+
+void preCalc(){
+
+    //1
+    dp[1] = 1;
+
+    //2
+    dp2[2] = dp[1];
+    dp[2] = dp[1] + 2 * dp2[1];
+
+    //3
+    dp[3] = dp[2] + 2 * dp2[2];
+    dp2[3] = dp[2];
+    dp3[3] = dp2[2]; 
+
+    for(int i=3;i<=MAXN - 5;i++){
+        dp[i] = (dp[i-1] + (2 * dp2[i-1]) % mod ) % mod;
+        dp2[i] = dp[i-1];
+        dp3[i] = dp2[i-1]; 
+    }
+
+    for(int i=3;i<=MAXN - 5;i++){
+        sum[i] = sum[i-3] + ( ( dp3[i] * 4 ) % mod);
+        sum[i] %= mod;
+    }
+}
 
 void solve(){
-
-	set<int> ans, nums;
-
-	for(int i=0;i<N;i++){
-		set<int> aux;
-
-		for(auto j : nums){
-			aux.insert(j | v[i]);
-			ans.insert(j | v[i]);
-		}
-
-		nums = aux
-;
-		nums.insert(v[i]);
-		ans.insert(v[i]);
-	}
-
-	cout << ans.size() << endl;
+    cout << sum[N] << endl;
 }
 
 int main(){
 
 	optimize;
 	
-	cin >> N;
-		
-	for(int i=0;i<N;i++) cin >> v[i];
+	cin >> T;
 
-    solve();
+    preCalc();
+
+    while(T--){
+		cin >> N;
+		
+		solve();
+    }
 
 	return 0;
 }

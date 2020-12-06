@@ -28,38 +28,68 @@ typedef pair<int,int> pii;
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 ll T,N,M,K;
 
-int v[MAXN];
+ll prefix(ll x){
+	if(x < 9) return x;
+
+	//Primeiro número não pode ser 9
+	ll p = 1, ans = 8;
+	x -= 8;
+
+	//Acho o prefixo do número
+	while(x){
+		p *= 10;
+		ans += p*min(x, 9LL);
+		x -= min(9LL, x);
+	}
+
+	return ans;
+}
 
 void solve(){
 
-	set<int> ans, nums;
+	ll ans = INFLL, s, p = 1;
 
-	for(int i=0;i<N;i++){
-		set<int> aux;
+	for(ll i=0;i<17;i++){
+		p *= 10LL;
 
-		for(auto j : nums){
-			aux.insert(j | v[i]);
-			ans.insert(j | v[i]);
+		for(ll j=0;j<10;j++){
+			M = N;
+			s = 0;
+
+			ll m = min(K+1, 10LL - j);
+
+			for(ll k=0;k<=K;k++){
+				s += (j+k)%10LL;
+			}
+
+			// M -= (f(x+1) - f(x)) - (f(x+2) - f(x)) ...
+			// M -= Sequencia de 9 nos números
+			// M -= Quantidade de números acima do prefixo escolhido
+			M -= s;
+			M -= i*9LL*m;
+			M -= (K+1 - m);
+
+			if(M >= 0 && !(M%(K+1))){
+				ans = min(ans, prefix(M/(K+1LL)) * p + p - 10LL + j);
+			}
 		}
-
-		nums = aux
-;
-		nums.insert(v[i]);
-		ans.insert(v[i]);
 	}
 
-	cout << ans.size() << endl;
+	if(ans == INFLL) 	cout << -1 << endl;
+	else 				cout << ans << endl;
 }
 
 int main(){
 
 	optimize;
 	
-	cin >> N;
-		
-	for(int i=0;i<N;i++) cin >> v[i];
+	cin >> T;
 
-    solve();
+    while(T--){
+		cin >> N >> K;
+		
+		solve();
+    }
 
 	return 0;
 }

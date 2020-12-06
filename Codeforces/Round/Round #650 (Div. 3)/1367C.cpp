@@ -27,39 +27,76 @@ typedef pair<int,int> pii;
 
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 ll T,N,M,K;
+string s;
 
-int v[MAXN];
+int v[MAXN], v2[MAXN];
 
 void solve(){
 
-	set<int> ans, nums;
+    int d = INF;
 
-	for(int i=0;i<N;i++){
-		set<int> aux;
+    for(int i=0;i<N;i++){
+        if(s[i] == '1'){
+            v[i] = 0;
+            d = -1;
+        }
+        else{
+            if(d == INF) v[i] = INF;
+            else         v[i] = ++d;
+        }
+    }
+    
+    d = INF;
 
-		for(auto j : nums){
-			aux.insert(j | v[i]);
-			ans.insert(j | v[i]);
-		}
+    for(int i=N-1;i>=0;i--){
+        if(s[i] == '1'){
+            v2[i] = 0;
+            d = -1;
+        }
+        else{
+            if(d == INF) v2[i] = INF;
+            else         v2[i] = ++d;
+        }
+    }
+    
+    int ans = 0;
+    d = M;
 
-		nums = aux
-;
-		nums.insert(v[i]);
-		ans.insert(v[i]);
-	}
+    for(int i=0;i<N;i++){
+        if( (v[i] >= M) && (v2[i] >= M) && d >= M){
+            ans++;
+            d = 0;
+        }
+        else{
+            d++;
+        }
+    }
 
-	cout << ans.size() << endl;
+    if(ans == 0){
+        bool ok = true;
+
+        for(int i=0;i<N;i++){
+            if(s[i] != '0') ok = false;
+        }
+
+        ans = ok;
+    }
+    cout << ans << endl;
 }
 
 int main(){
 
 	optimize;
 	
-	cin >> N;
-		
-	for(int i=0;i<N;i++) cin >> v[i];
+	cin >> T;
 
-    solve();
+    while(T--){
+		cin >> N >> M;
+
+        cin >> s;
+
+		solve();
+    }
 
 	return 0;
 }

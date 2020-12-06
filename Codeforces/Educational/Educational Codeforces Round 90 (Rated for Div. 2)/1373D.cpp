@@ -27,39 +27,59 @@ typedef pair<int,int> pii;
 
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 ll T,N,M,K;
-
-int v[MAXN];
+ll v[MAXN];
 
 void solve(){
 
-	set<int> ans, nums;
+	ll ans, sum = 0;
+	for(int i=0;i<N;i+=2) sum += v[i];
+	
+	//Começando de uma posição par
+	ll maior = 0, aux = 0;
+	bool ok = false;
 
-	for(int i=0;i<N;i++){
-		set<int> aux;
+	for(int i=0;i<N-1;i+=2){
+		aux += (v[i+1] - v[i]);
 
-		for(auto j : nums){
-			aux.insert(j | v[i]);
-			ans.insert(j | v[i]);
-		}
+		if(aux > maior) maior = aux;
 
-		nums = aux
-;
-		nums.insert(v[i]);
-		ans.insert(v[i]);
+		if(aux < 0) aux = 0;
 	}
 
-	cout << ans.size() << endl;
+	ans = maior + sum;
+
+	//Começando de uma posição impar
+	maior = 0, aux = 0;
+	ok = false;
+	
+	for(int i=1;i<N-1;i+=2){
+		aux += (v[i] - v[i+1]);
+
+		if(aux > maior) maior = aux;
+
+		if(aux < 0) aux = 0;
+	}
+
+	ans = max(ans, maior + sum);
+
+	cout << ans << endl;
 }
 
 int main(){
 
 	optimize;
 	
-	cin >> N;
-		
-	for(int i=0;i<N;i++) cin >> v[i];
+	cin >> T;
 
-    solve();
+    while(T--){
+		cin >> N;
+
+		for(int i=0;i<N;i++) {
+			cin >> v[i];
+		}
+		
+		solve();
+    }
 
 	return 0;
 }

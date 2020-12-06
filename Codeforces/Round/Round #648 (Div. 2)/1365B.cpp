@@ -28,38 +28,43 @@ typedef pair<int,int> pii;
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 ll T,N,M,K;
 
-int v[MAXN];
+int a[MAXN], b[MAXN];
 
 void solve(){
 
-	set<int> ans, nums;
-
-	for(int i=0;i<N;i++){
-		set<int> aux;
-
-		for(auto j : nums){
-			aux.insert(j | v[i]);
-			ans.insert(j | v[i]);
+	for(int i=0;i<N-1;i++){
+		if(b[i] != b[i+1]){
+			cout << "Yes\n";
+			return;
 		}
-
-		nums = aux
-;
-		nums.insert(v[i]);
-		ans.insert(v[i]);
 	}
 
-	cout << ans.size() << endl;
+	bool ok = true;
+
+	for(int i=0;i<N-1;i++){
+		if(a[i] > a[i+1]){
+			ok = false;
+		}
+	}
+
+	if(ok) 	cout << "Yes\n";
+	else 	cout << "No\n";
 }
 
 int main(){
 
 	optimize;
 	
-	cin >> N;
-		
-	for(int i=0;i<N;i++) cin >> v[i];
+	cin >> T;
 
-    solve();
+    while(T--){
+		cin >> N;
+
+		for(int i=0;i<N;i++) cin >> a[i];
+		for(int i=0;i<N;i++) cin >> b[i];
+                            
+		solve();
+    }
 
 	return 0;
 }

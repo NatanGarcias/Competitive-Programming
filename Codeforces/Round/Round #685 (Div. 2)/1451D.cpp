@@ -27,39 +27,76 @@ typedef pair<int,int> pii;
 
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 ll T,N,M,K;
+int cnt;
 
-int v[MAXN];
+bool h(ll x, ll y){
+    return x*x + y*y <= N*N;
+}
+
+void venc(){
+    if(cnt & 1){
+        cout << "Ashish\n";
+    }
+    else{
+        cout << "Utkarsh\n";
+    }
+}
 
 void solve(){
 
-	set<int> ans, nums;
+    vector<int> ans;
 
-	for(int i=0;i<N;i++){
-		set<int> aux;
+    ll x = 0,y = 0;
+    cnt = 0;
 
-		for(auto j : nums){
-			aux.insert(j | v[i]);
-			ans.insert(j | v[i]);
-		}
+    ll t = N/M , t2 = 0;
 
-		nums = aux
-;
-		nums.insert(v[i]);
-		ans.insert(v[i]);
-	}
+    if( !(N%M) ) t--;
+    
+    ll mov = t;
+    
+    t = t * M;
+    
+    while(t >= t2 && h(t , t2+M) ){
+        mov++;
+        t2 += M;
+    }
 
-	cout << ans.size() << endl;
+    ans.push_back(mov);
+
+    while(t >= t2){
+        t -= M;
+
+        mov--;
+
+        while(t >= t2 && h (t , t2+M) ){
+            mov++;
+            t2 += M;
+        }
+
+        if(t >= t2){
+            ans.push_back(mov);
+        }
+    }
+
+    if(ans[ans.size()-1] & 1) cnt = 1;
+    else cnt = 0;
+    
+    venc();
+
 }
 
 int main(){
 
 	optimize;
 	
-	cin >> N;
-		
-	for(int i=0;i<N;i++) cin >> v[i];
+	cin >> T;
 
-    solve();
+    while(T--){
+		cin >> N >> M;
+		
+		solve();
+    }
 
 	return 0;
 }

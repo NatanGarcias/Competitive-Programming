@@ -23,32 +23,30 @@ typedef pair<int,int> pii;
 #define INFLL 0x3f3f3f3f3f3f3f3f
 
 #define mod 1000000007LL
-#define MAXN 200010
+#define MAXN 1000100
 
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 ll T,N,M,K;
 
-int v[MAXN];
+ll bit[MAXN];
 
-void solve(){
+void update(int x, ll b){
 
-	set<int> ans, nums;
+	for(;x<MAXN;x+= x&-x) bit[x] += b;
+}
 
-	for(int i=0;i<N;i++){
-		set<int> aux;
+ll query(int x){
+	ll sum = 0;
 
-		for(auto j : nums){
-			aux.insert(j | v[i]);
-			ans.insert(j | v[i]);
-		}
+	for(;x>0;x-= x&-x) sum += bit[x];
 
-		nums = aux
-;
-		nums.insert(v[i]);
-		ans.insert(v[i]);
-	}
+	return sum;
+}
 
-	cout << ans.size() << endl;
+ll queryI(int a, int b){
+
+	if(a == 1) 	return query(b);
+	else 		return query(b) - query(a-1);
 }
 
 int main(){
@@ -56,10 +54,29 @@ int main(){
 	optimize;
 	
 	cin >> N;
-		
-	for(int i=0;i<N;i++) cin >> v[i];
 
-    solve();
+	for(int i=0;i<N;i++) {
+		int a;
+		cin >> a;
+
+		update(i+1,a);
+	}
+
+	cin >> M;
+
+	for(int i=0;i<M;i++){
+		char k;
+		int a, b;
+
+		cin >> k >> a >> b;
+
+		if(k == 'q'){
+			cout << queryI(a,b) << endl;
+		}
+		else{
+			update(a,b);
+		}
+	}
 
 	return 0;
 }

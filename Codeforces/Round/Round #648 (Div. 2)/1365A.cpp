@@ -23,43 +23,56 @@ typedef pair<int,int> pii;
 #define INFLL 0x3f3f3f3f3f3f3f3f
 
 #define mod 1000000007LL
-#define MAXN 200010
+#define MAXN 55
 
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 ll T,N,M,K;
-
-int v[MAXN];
+vector<bool> h, v;
 
 void solve(){
 
-	set<int> ans, nums;
+    int cnt = 0, cnt2 = 0;
 
-	for(int i=0;i<N;i++){
-		set<int> aux;
+    for(auto i : h) if(!i) cnt++;
+    for(auto i : v) if(!i) cnt2++;
 
-		for(auto j : nums){
-			aux.insert(j | v[i]);
-			ans.insert(j | v[i]);
-		}
+    int ans = min(cnt,cnt2);
 
-		nums = aux
-;
-		nums.insert(v[i]);
-		ans.insert(v[i]);
-	}
-
-	cout << ans.size() << endl;
+    if(ans & 1)  cout << "Ashish\n";
+    else         cout << "Vivek\n"; 
 }
 
 int main(){
 
 	optimize;
 	
-	cin >> N;
-		
-	for(int i=0;i<N;i++) cin >> v[i];
+	cin >> T;
 
-    solve();
+    int aux = 0;
+
+    while(T--){
+		cin >> N >> M;
+
+        h.clear();
+        v.clear();
+
+        h.assign(N,0);
+        v.assign(M,0);
+
+        for(int i=0;i<N;i++) {
+            for(int j=0;j<M;j++) {
+                int a;
+                cin >> a;
+
+                if(a) {
+                    h[i] = true;
+                    v[j] = true;
+                }
+            }
+        }
+
+		solve();
+    }
 
 	return 0;
 }

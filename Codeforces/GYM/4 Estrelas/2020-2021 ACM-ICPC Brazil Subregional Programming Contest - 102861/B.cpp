@@ -23,32 +23,21 @@ typedef pair<int,int> pii;
 #define INFLL 0x3f3f3f3f3f3f3f3f
 
 #define mod 1000000007LL
-#define MAXN 200010
+#define MAXN 15
 
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 ll T,N,M,K;
 
-int v[MAXN];
+int n = 10, m = 10;
+bool vis[MAXN][MAXN];
+
+bool posValid(int x, int y){
+    if(x < 1 || y < 1 || x > n || y > m) return false;
+    return true;
+}
 
 void solve(){
 
-	set<int> ans, nums;
-
-	for(int i=0;i<N;i++){
-		set<int> aux;
-
-		for(auto j : nums){
-			aux.insert(j | v[i]);
-			ans.insert(j | v[i]);
-		}
-
-		nums = aux
-;
-		nums.insert(v[i]);
-		ans.insert(v[i]);
-	}
-
-	cout << ans.size() << endl;
 }
 
 int main(){
@@ -57,9 +46,38 @@ int main(){
 	
 	cin >> N;
 		
-	for(int i=0;i<N;i++) cin >> v[i];
+    for(int i=0;i<N;i++){
+        int a,b,c,d;
 
-    solve();
+        cin >> a >> b >> c >> d;
+
+        int x,y;
+
+        if(!a){
+            for(int i=0;i<b;i++){
+                if(!posValid(c,d+i) || vis[c][d+i]){
+                    cout << "N\n";
+                    exit(0);
+                }
+                else{
+                    vis[c][d+i] = true;
+                }
+            }
+        }
+        else{
+            for(int i=0;i<b;i++){
+                if(!posValid(c+i,d) || vis[c+i][d]){
+                    cout << "N\n";
+                    exit(0);
+                }
+                else{
+                    vis[c+i][d] = true;
+                }
+            }
+        } 
+    }   
+
+    cout << "Y\n";
 
 	return 0;
 }

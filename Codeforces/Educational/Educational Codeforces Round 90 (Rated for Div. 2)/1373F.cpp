@@ -23,43 +23,46 @@ typedef pair<int,int> pii;
 #define INFLL 0x3f3f3f3f3f3f3f3f
 
 #define mod 1000000007LL
-#define MAXN 200010
+#define MAXN 1000010
 
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 ll T,N,M,K;
 
-int v[MAXN];
+int A[MAXN], B[MAXN], C[MAXN];
 
 void solve(){
 
-	set<int> ans, nums;
+	for(int i=0;i<2*N;i++){
+		//Qts eu posso passar para o próximo
+		int aux = max(0 , min(B[(i%N)] , C[(i%N)] + B[(i%N)] - A[(i%N)] ) );
 
-	for(int i=0;i<N;i++){
-		set<int> aux;
-
-		for(auto j : nums){
-			aux.insert(j | v[i]);
-			ans.insert(j | v[i]);
-		}
-
-		nums = aux
-;
-		nums.insert(v[i]);
-		ans.insert(v[i]);
+		C[(i+1)%N] = aux;
 	}
 
-	cout << ans.size() << endl;
+	for(int i=0;i<N;i++){
+		if(B[i] - C[(i+1)%N] + C[i] - A[i] < 0) {
+			cout << "NO\n";
+			return;
+		}
+	}
+
+	cout << "YES\n";
 }
 
 int main(){
 
 	optimize;
 	
-	cin >> N;
-		
-	for(int i=0;i<N;i++) cin >> v[i];
+	cin >> T;
 
-    solve();
+    while(T--){
+		cin >> N;
+
+		for(int i=0;i<N;i++) cin >> A[i];
+		for(int i=0;i<N;i++) cin >> B[i];
+		
+		solve();
+    }
 
 	return 0;
 }

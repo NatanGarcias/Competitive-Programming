@@ -23,32 +23,28 @@ typedef pair<int,int> pii;
 #define INFLL 0x3f3f3f3f3f3f3f3f
 
 #define mod 1000000007LL
-#define MAXN 200010
+#define MAXN 510
 
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 ll T,N,M,K;
 
-int v[MAXN];
+ll v[MAXN];
 
 void solve(){
 
-	set<int> ans, nums;
+    ll ans = 0;
 
-	for(int i=0;i<N;i++){
-		set<int> aux;
+    for(int i=0;i<N;i++){
+        for(int j=i;j<N;j++){
+            for(int k=j;k<N;k++){
+                ll aux = v[i] | v[j] | v[k];
 
-		for(auto j : nums){
-			aux.insert(j | v[i]);
-			ans.insert(j | v[i]);
-		}
+                ans = max(ans, aux);
+            }
+        }
+    }
 
-		nums = aux
-;
-		nums.insert(v[i]);
-		ans.insert(v[i]);
-	}
-
-	cout << ans.size() << endl;
+    cout << ans << endl;
 }
 
 int main(){
@@ -56,10 +52,10 @@ int main(){
 	optimize;
 	
 	cin >> N;
-		
-	for(int i=0;i<N;i++) cin >> v[i];
+    
+    for(int i=0;i<N;i++) cin >> v[i];
 
-    solve();
-
+	solve();
+    
 	return 0;
 }

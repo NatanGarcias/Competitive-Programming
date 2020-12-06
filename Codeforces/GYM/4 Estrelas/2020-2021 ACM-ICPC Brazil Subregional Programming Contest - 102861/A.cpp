@@ -23,43 +23,43 @@ typedef pair<int,int> pii;
 #define INFLL 0x3f3f3f3f3f3f3f3f
 
 #define mod 1000000007LL
-#define MAXN 200010
+#define MAXN 1123456
 
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
-ll T,N,M,K;
+ll T,N,M,K,A,B;
 
-int v[MAXN];
+ld pre[MAXN], nums[MAXN];
+
+ld query(int l, int r){
+    return pre[r] - pre[l]; 
+}
 
 void solve(){
 
-	set<int> ans, nums;
+    pre[0] = 0.0;
+    nums[0] = 0.0;
 
-	for(int i=0;i<N;i++){
-		set<int> aux;
+    ld L = B - A + 1;
 
-		for(auto j : nums){
-			aux.insert(j | v[i]);
-			ans.insert(j | v[i]);
-		}
+    for(int i=1;i<=N;i++){
 
-		nums = aux
-;
-		nums.insert(v[i]);
-		ans.insert(v[i]);
-	}
+        nums[i] = 1.0 + query( max(0LL, i-B-1) , max(0LL, min(i-A, i-1LL) ) );
 
-	cout << ans.size() << endl;
+        if(!A) nums[i] = nums[i] * (L / ((L-1)*1.0));
+
+        pre[i] = pre[i-1] + ( 1.0/ (L*1.0) ) * nums[i];
+    }    
+
+    cout << fixed << setprecision(8) << nums[N] << endl;
 }
 
 int main(){
 
 	optimize;
 	
-	cin >> N;
+	cin >> N >> A >> B;
 		
-	for(int i=0;i<N;i++) cin >> v[i];
-
-    solve();
+	solve();
 
 	return 0;
 }

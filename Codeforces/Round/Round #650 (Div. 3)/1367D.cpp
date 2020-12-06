@@ -23,43 +23,67 @@ typedef pair<int,int> pii;
 #define INFLL 0x3f3f3f3f3f3f3f3f
 
 #define mod 1000000007LL
-#define MAXN 200010
+#define MAXN 2010
 
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 ll T,N,M,K;
-
+string s;
 int v[MAXN];
 
 void solve(){
 
-	set<int> ans, nums;
+    vector<int> l(26,0);
+    vector<bool> vis(N,0);
+    vector<char> ans(N, '0');
 
-	for(int i=0;i<N;i++){
-		set<int> aux;
+    for(auto i : s) l[i-'a']++;
 
-		for(auto j : nums){
-			aux.insert(j | v[i]);
-			ans.insert(j | v[i]);
-		}
+    int cnt = 0, pos = 25;
 
-		nums = aux
-;
-		nums.insert(v[i]);
-		ans.insert(v[i]);
-	}
+    while(cnt < N){
+        vector<int> p;
+        
+        for(int i=0;i<N;i++) if(!vis[i] && v[i] == 0) p.pb(i);
 
-	cout << ans.size() << endl;
+        for(int i = pos;i>=0;i--){
+            if(l[i] >= p.size() ){
+                cnt += p.size();
+                l[i] -= p.size();
+
+                for(auto j : p) {
+                    vis[j] = true;
+                    ans[j] = (char) (i + 'a');
+
+                    for(int k=0;k<N;k++){
+                        v[k] = v[k] - abs(j-k);
+                    }
+                }
+                
+                pos = --i;
+                break;
+            }
+        }
+    }
+
+    for(auto i : ans) cout << i;
+    cout << endl;
 }
 
 int main(){
 
 	optimize;
 	
-	cin >> N;
-		
-	for(int i=0;i<N;i++) cin >> v[i];
+	cin >> T;
 
-    solve();
+    while(T--){
+		cin >> s;
+
+        cin >> N;
+        
+        for(int i=0;i<N;i++) cin >> v[i];
+		
+		solve();
+    }
 
 	return 0;
 }

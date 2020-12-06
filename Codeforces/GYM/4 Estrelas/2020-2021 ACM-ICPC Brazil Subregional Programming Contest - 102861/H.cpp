@@ -23,43 +23,73 @@ typedef pair<int,int> pii;
 #define INFLL 0x3f3f3f3f3f3f3f3f
 
 #define mod 1000000007LL
-#define MAXN 200010
+#define MAXN 55
 
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
-ll T,N,M,K;
+ll T,N,M,K,A,B;
 
-int v[MAXN];
+ll c[MAXN], ans;
+
+ll comb(ll n , ll k){
+
+    if(k > n) return 0LL;
+
+    ll r = min(k,n-k);
+    
+    ll x = 1, y = 1;
+
+    if(!r) return 1;
+
+    while(r){
+        x *= n;
+        y *= r;
+
+        ll aux = __gcd(x,y);
+
+        x /= aux;
+        y /= aux;
+
+        n--;
+        r--;
+    }
+    
+    return x;
+}
+
+ll solve(ll i, ll q, ll peso){
+
+    if(q == K) return 1LL;
+    if(i == N) return 0LL;
+
+    if(peso < c[i]) return solve(i+1,q,peso);
+    else{
+        ll aux = solve(i+1,q+1,peso-c[i]);
+
+        aux += comb(N-i-1, K-q);
+
+        return aux;   
+    }
+}
 
 void solve(){
 
-	set<int> ans, nums;
+    sort(c,c+N);
+    reverse(c,c+N);
 
-	for(int i=0;i<N;i++){
-		set<int> aux;
-
-		for(auto j : nums){
-			aux.insert(j | v[i]);
-			ans.insert(j | v[i]);
-		}
-
-		nums = aux
-;
-		nums.insert(v[i]);
-		ans.insert(v[i]);
-	}
-
-	cout << ans.size() << endl;
+    cout << solve(0,0,B) - solve(0,0,A-1LL) << endl;
 }
 
 int main(){
 
 	optimize;
 	
-	cin >> N;
-		
-	for(int i=0;i<N;i++) cin >> v[i];
+	cin >> N >> K;
+    
+    for(int i=0;i<N;i++) cin >> c[i];
 
-    solve();
+    cin >> A >> B;
 
+	solve();
+    
 	return 0;
 }

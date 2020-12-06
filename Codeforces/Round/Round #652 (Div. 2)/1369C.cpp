@@ -28,38 +28,72 @@ typedef pair<int,int> pii;
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 ll T,N,M,K;
 
-int v[MAXN];
+ll A[MAXN], B[MAXN];
 
 void solve(){
 
-	set<int> ans, nums;
+    sort(A,A+N);
+    reverse(A,A+N);
+    sort(B,B+M);
 
-	for(int i=0;i<N;i++){
-		set<int> aux;
+    vector<vector<int>> adj(M);
 
-		for(auto j : nums){
-			aux.insert(j | v[i]);
-			ans.insert(j | v[i]);
-		}
+    int j = 0, k = -1, i = 0;
 
-		nums = aux
-;
-		nums.insert(v[i]);
-		ans.insert(v[i]);
-	}
+    for(i=0;i<N;i++){
+        if(B[j] == 1){
+            adj[j].pb(A[i]);
+            j++;
+        }
+        else if(B[j] == 2){
+            adj[j].pb(A[i]);
+            i++;
+            adj[j].pb(A[i]);
+            j++;
+        }
+        else{
+            if(k == -1) k = j;
 
-	cout << ans.size() << endl;
+            for(;j<M;j++,i++) {
+                adj[j].pb(A[i]);
+            }
+            break;
+        }
+    }
+
+    k = max(0, k);
+    
+    for(j = k;j<M;j++){
+        for(int l = adj[j].size();l < B[j];l++, i++){
+            adj[j].pb(A[i]);
+        }
+    }
+
+    for(i=0;i<M;i++) sort(all(adj[i]));
+
+    ll ans = 0;
+
+    for(i=0;i<M;i++){
+        ans += adj[i][0] + adj[i].back();
+    }
+
+    cout << ans << endl;
 }
 
 int main(){
 
 	optimize;
 	
-	cin >> N;
-		
-	for(int i=0;i<N;i++) cin >> v[i];
+	cin >> T;
 
-    solve();
+    while(T--){
+		cin >> N >> M;
+
+        for(int i=0;i<N;i++) cin >> A[i];
+        for(int i=0;i<M;i++) cin >> B[i];
+
+		solve();
+    }
 
 	return 0;
 }
