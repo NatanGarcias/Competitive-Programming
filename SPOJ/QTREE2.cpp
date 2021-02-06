@@ -142,11 +142,9 @@ struct HLD{
 		return res;
 	}
 
-	int query(int a, int b, int c) {
+	int kth(int a, int b, int k) {
 	    //Descobre o tamanho do caminho
-		int t = 0;
-		int A = a;
-		int B = b;
+		int t = 0, A = a, B = b;
 
 	    for (; head[a] != head[b]; b = parent[head[b]]) {
 	        
@@ -164,58 +162,53 @@ struct HLD{
 		t += last_heavy_path_max;
 	    
 		//Calcula o elemento naquela posição
-		int indo = c-1;
-		int vindo = t-c;
+		int indo = k-1;
+		int vindo = t-k;
 
 		a = A;
 		b = B;
 		
-		if(c == 1) return a;
-		if(c == t) return b;
+		if(k == 1) return a;
+		if(k == t) return b;
 	
-		bool escolha = true;
+		bool esc = true;
 		
-		for (; head[a] != head[b] && (indo > 0  && vindo > 0); b = parent[head[b]]) {
+		for (; head[a] != head[b] && (indo && vindo); b = parent[head[b]]) {
 			
 			if (depth[head[a]] > depth[head[b]]){
 				swap(a, b);
-				escolha = escolha^1;
+				esc = esc^1;
 			}
 	        
 			int cur_heavy_path_max = abs(depth[head[b]] - depth[b]);
 
-			if(!escolha){
+			if(!esc){
 				if(indo <= cur_heavy_path_max){
-
 					return rpos[ pos[b] - indo];
-				
-				}else{
+				}
+				else{
 					indo -= cur_heavy_path_max+1;
 				}
-			}else{
-				if(vindo <= cur_heavy_path_max){
-					
+			}
+			else{
+				if(vindo <= cur_heavy_path_max){	
 					return rpos[ pos[b] - vindo ];
-
-				}else{
+				}
+				else{
 					vindo -= cur_heavy_path_max+1;
 				}
 			}
 		}
 
-		if(indo == 0) return rpos[pos[b]];
-		if(vindo == 0) return rpos[ pos[b] ];
+		if(!indo || !vindo) return rpos[pos[b]];
 
 		if (depth[a] > depth[b]){
 			swap(a, b);
-			escolha = escolha^1;
+			esc = esc^1;
 		}
 
-		if(escolha){
-			return rpos[ pos[a] + indo ];
-		}else{
-			return rpos[ pos[a] + vindo];
-		}
+		if(esc) return rpos[ pos[a] + indo ];
+		else	return rpos[ pos[a] + vindo];
 
 		return 0;
 	}
@@ -242,7 +235,7 @@ void solve(){
 		}else{
 			cin >> a >> b >> c; a--; b--;
 
-			int aux = hld.query(a,b,c);
+			int aux = hld.kth(a,b,c);
 
 			cout << aux+1 << endl;
 		}
