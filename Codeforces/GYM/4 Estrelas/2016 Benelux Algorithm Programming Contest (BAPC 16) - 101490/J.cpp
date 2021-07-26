@@ -15,23 +15,33 @@ typedef pair<int,int> pii;
 #define se second 
 #define pb push_back
 
-#define sz(x) (ll)(x.size())
 #define all(x) x.begin(),x.end()
-#define FOR(x,a,n) for(int x= (int)(a);(x) < int(n);(x)++)
 #define ms(x,a) memset(x,a,sizeof(x))
 
 #define INF 0x3f3f3f3f
 #define INFLL 0x3f3f3f3f3f3f3f3f
 
+#define mod 1000000007LL
+#define MAXL 110
+
+mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
+
+//#define _DEBUG
+// #ifdef _DEBUG
+// #endif
+
+/* -------------------------------- Solution starts below -------------------------------- */
+
+ll T,N,M,K;
+pii A[MAXL], B[MAXL];
+int d[MAXL][MAXL];
+
 #define MAXN 103000
 #define MAXM 900000
-#define MAXL 55
 
-ll N,M,R,C;
 int ned, first[MAXN], work[MAXN], dist[MAXN], q[MAXN];
 int cap[MAXM], to[MAXM], nxt[MAXM];
 
-//Dinic Normal
 void init() {
    memset(first, -1, sizeof first);
    ned = 0;
@@ -90,110 +100,60 @@ int dinic(int s, int t) {
 	return result;
 }
 
-//Matriz de custo, visitados e resposta
-int v[MAXL][MAXL];
-bool vis[MAXL][MAXL];
-char ans[MAXL][MAXL];
-
-//Retorna a posição do vértice no fluxo
-// z == 0 vértice v
-// z == 1 vértice v'
-//vértice fora dos limites é o destino
-int getP(int x, int y, bool z){
-	
-    if(x < 0 || y < 0 || x>=N || y>=M) return 2*N*M;
-    
-	if(z) return 2*(x*M + y);
-	else  return 2*(x*M + y) +1;
+int di(pii a, pii b){
+    return abs(a.fi-b.fi) + abs(a.se-b.se);
 }
 
-//Vejo se estou numa posição válida na matriz
-bool posValid(int x, int y){
-	if( x<0 || y<0 || x>=N || y>=M) return false;
-	return true;
+void preCalc(){
+    for(int i=0;i<N;i++) for(int j=0;j<N;j++) d[i][j] = di(A[i],B[j]);
 }
 
-//Construo o grafo
-void fluxo(){
+int f(int x){
 
     init();
 
-    int n = 2*N*M, s = getP(R,C, 1);
-	
-	// Adiciono aresta que liga o vertice v a v' com o fluxo v[i][j]
-	FOR(i,0,N){
-		FOR(j,0,M){
-			add(getP(i,j,0), getP(i,j,1), v[i][j]);	
-		}
-	}
+    for(int i=0;i<N;i++) add(0,i+1,1);
 
-	//Adiciono aresta que liga o v' aos vertices adjacentes com o fluxo INF
-    FOR(i,0,N){
-        FOR(j,0,M){
-
-            int u = getP(i,j,1);
-	        
-			for(int k = -1;k<=1; k++){
-                for(int l = -1;l<=1; l++){
-                    if(abs(k) + abs(l) == 1) {
-						if(i+k == R && j+l == C) continue; // Ignoro a fonte
-                        int w = getP(i+k, j+l, 0);
-
-						add(u, w, INF);
-                    }
-                }
-            }
-	    }
-    }
-
-	//Imprimo o corte mínimo
-	cout << dinic(s, n) << endl;
-}
-
-//Dfs para achar a matriz de resposta
-void dfs(){
-	
-	//Inicio a matriz como se toda posição não fosse uma cerca
-	FOR(i,0,N) FOR(j,0,M) ans[i][j] = '.';
-	
-	FOR(i,0,N*M){
-        if(dist[2*i]< 0 && dist[2*i+1] >= 0){
-            int px = i/M;
-            int py = i%M;
-            
-            ans[px][py] = 'X';
+    for(int i=0;i<N;i++) {
+        for(int j=0;j<N;j++) {
+            if(d[i][j] <= x) add(i+1, N+j+1,1);
         }
     }
+
+    for(int i=0;i<N;i++) add(N+i+1,2*N+1,1);
+
+    return dinic(0,2*N+1) >= N;
 }
 
-//Só imprimi a matriz
-void print(){
+int bb(){
 
-	FOR(i,0,N){
-		FOR(j,0,M){
-			cout << ans[i][j];
-		}
-		cout << endl;
-	}
+    int l = 0, r = INF;
 
+    while(l < r){
+        int m = (l+r)/2;
+
+        if( f(m) ) r = m;
+        else l = m + 1;
+    }
+
+    return l;
 }
 
 void solve(){
-	fluxo();
-	dfs();
-	print();
+
+    preCalc();
+    cout << bb() << endl;
 }
 
 int main(){
 
 	optimize;
 	
-	cin >> N >> M >> R >> C;
+	cin >> N;
+	
+    for(int i=0;i<N;i++) cin >> A[i].fi >> A[i].se;
+    for(int i=0;i<N;i++) cin >> B[i].fi >> B[i].se;
 
-	R--; C--;
-
-    FOR(i,0,N) FOR(j,0,M) cin >> v[i][j];
-		
 	solve();
 
 	return 0;
